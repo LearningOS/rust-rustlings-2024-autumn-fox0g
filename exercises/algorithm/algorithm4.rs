@@ -3,7 +3,7 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
+
 use std::cmp::Ordering;
 use std::fmt::Debug;
 
@@ -48,15 +48,24 @@ where
         BinarySearchTree { root: None }
     }
 
+    
     // Insert a value into the BST
-    fn insert(&mut self, value: T) {
-        //TODO
+    pub fn insert(&mut self, value: T) {
+        if let Some(ref mut node) = self.root {
+            node.insert(value);               
+        } else {
+            self.root = Some(Box::new(TreeNode::new(value)));
+        }  
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        true
+        if let Some(ref node) = self.root {
+            return node.search(value);        
+        }else{
+            println!("为空");
+            return false;
+        }
     }
 }
 
@@ -66,7 +75,39 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
+        if self.value < value {
+            if let Some(ref mut right) = self.right {
+                right.insert(value);               
+            } else {
+                self.right = Some(Box::new(TreeNode::new(value)));
+            }
+        } else {
+            if let Some(ref mut left) = self.left {
+                left.insert(value);
+            } else {
+                self.left = Some(Box::new(TreeNode::new(value)));
+            }
+        }
+    }
+    fn search(& self, value: T) -> bool {
+        if self.value == value {
+            println!("+-*/找到了");
+            return true;
+        } else if self.value < value {
+            if let Some(ref right) = self.right {
+                return right.search(value);               
+            } else {
+                println!("+-*/没找到");
+                return false;
+            }
+        } else {
+            if let Some(ref left) = self.left {
+                return left.search(value);
+            } else {
+                println!("+-*/没找到");
+                return false;
+            }
+        }
     }
 }
 
@@ -77,7 +118,7 @@ mod tests {
 
     #[test]
     fn test_insert_and_search() {
-        let mut bst = BinarySearchTree::new();
+        let mut bst = BinarySearchTree::<i32>::new();
 
         
         assert_eq!(bst.search(1), false);

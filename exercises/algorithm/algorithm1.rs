@@ -2,13 +2,14 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
 use std::vec::*;
 
-#[derive(Debug)]
+
+#[derive(Debug, PartialEq)]
 struct Node<T> {
     val: T,
     next: Option<NonNull<Node<T>>>,
@@ -45,14 +46,25 @@ impl<T> LinkedList<T> {
     }
 
     pub fn add(&mut self, obj: T) {
+        // 创建一个Node，因为大小未知，所以用Box分配空间
         let mut node = Box::new(Node::new(obj));
         node.next = None;
-        let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
+        // 将Node转为Node.next需要的Option类型
+        let node_ptr = Some(unsafe { 
+            NonNull::new_unchecked(Box::into_raw(node)) 
+        });
+        // 匹配原list最后元素
         match self.end {
+            // 最后一个为None，整个list为空
+            // 直接赋值给start（后面的操作同样会赋值给end，因为只有一个元素）
             None => self.start = node_ptr,
+            // 最后一个有值，获取Option里面内容
+            // 获取到原始指针，并解引用，给next赋值为node_ptr
             Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
         }
+        // 整体list最后一个就是插入的obj对应的node_ptr
         self.end = node_ptr;
+        // 整体长度+1
         self.length += 1;
     }
 
@@ -69,14 +81,41 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+	pub fn merge(mut list_a:LinkedList<i32>,mut list_b:LinkedList<i32>) -> LinkedList<i32>
 	{
-		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+        let mut list_c = LinkedList::<i32>::new();
+        
+        let mut a_index = 0;
+        let mut b_index = 0;
+        while a_index < list_a.length && b_index < list_b.length {
+            // a,b都没匹配完
+            let a_val = *list_a.get(a_index as i32).unwrap();
+            let b_val = *list_b.get(b_index as i32).unwrap();
+            if a_val < b_val {
+                // a比b小
+                // 插入a
+                list_c.add(a_val);
+                a_index += 1;
+                
+            }else {
+                list_c.add(b_val);
+                b_index += 1;
+            }
         }
+
+        if a_index == list_a.length {
+            // a插完了，把b剩下的全插入
+            for i in b_index..list_b.length {
+                list_c.add(*list_b.get(i as i32).unwrap()); 
+            }
+        }
+        if b_index == list_b.length {
+            // b插完了，把a剩下的全插入
+            for i in a_index..list_a.length {
+                list_c.add(*list_a.get(i as i32).unwrap()); 
+            }
+        }
+        list_c
 	}
 }
 

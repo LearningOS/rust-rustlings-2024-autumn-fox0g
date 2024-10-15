@@ -2,7 +2,7 @@
 	queue
 	This question requires you to use queues to implement the functionality of the stac
 */
-// I AM NOT DONE
+
 
 #[derive(Debug)]
 pub struct Queue<T> {
@@ -56,26 +56,53 @@ pub struct myStack<T>
 {
 	//TODO
 	q1:Queue<T>,
-	q2:Queue<T>
+	q2:Queue<T>,
+    loc:i32,
 }
 impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
 			q1:Queue::<T>::new(),
-			q2:Queue::<T>::new()
+			q2:Queue::<T>::new(),
+            loc:1,
         }
     }
     pub fn push(&mut self, elem: T) {
-        //TODO
+        if self.loc == 1 {
+            self.q1.enqueue(elem);
+        }else {
+            self.q2.enqueue(elem);
+        }
+        
     }
     pub fn pop(&mut self) -> Result<T, &str> {
         //TODO
-		Err("Stack is empty")
+        if self.loc == 2 {
+            while self.q2.size() >0 {
+                self.q1.enqueue(self.q2.dequeue().unwrap());
+            }
+        }
+        match self.q1.is_empty() {
+            true => Err("Stack is empty"),
+            _ => {
+                while self.q1.size() >1 {
+                    self.q2.enqueue(self.q1.dequeue().unwrap());
+                }
+                self.loc = 2;
+                
+                self.q1.dequeue()
+            }
+        }
+
     }
     pub fn is_empty(&self) -> bool {
 		//TODO
-        true
+        if self.loc == 1 {
+            return self.q1.is_empty();
+        }else {
+            return self.q2.is_empty();
+        }
     }
 }
 
@@ -90,6 +117,7 @@ mod tests {
         s.push(1);
         s.push(2);
         s.push(3);
+        // println!("{:?}",s.pop());
         assert_eq!(s.pop(), Ok(3));
         assert_eq!(s.pop(), Ok(2));
         s.push(4);
