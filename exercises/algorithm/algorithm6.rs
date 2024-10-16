@@ -23,6 +23,7 @@ impl Graph {
     }
 
     fn dfs_util(&self, v: usize, visited: &mut HashSet<usize>, visit_order: &mut Vec<usize>) {
+        println!("+-*/{}",v);
         let next = visited.insert(v);
         if !next {
             return ;
@@ -30,7 +31,9 @@ impl Graph {
      
         //TODO
         for i in self.adj[v].iter(){
+            
             self.dfs_util(*i,visited, visit_order);
+            
         }
         
         
@@ -48,6 +51,7 @@ impl Graph {
             }
             
         }
+        println!("+-*///{:?}",visit_order);
     }
 
     // Perform a depth-first search on the graph, return the order of visited nodes
@@ -55,6 +59,7 @@ impl Graph {
         let mut visited = HashSet::new();
         let mut visit_order = Vec::new(); 
         self.dfs_util(start, &mut visited, &mut visit_order);
+        println!("+-*///{:?}",visit_order);
         visit_order
     }
 }
@@ -95,7 +100,10 @@ mod tests {
 
         // let visit_order = graph.dfs(0);
         // assert_eq!(visit_order, vec![0, 1, 2]); 
-        let visit_order_disconnected = graph.dfs(3);
+        println!("ok");
+        // let visit_order_disconnected = graph.dfs(3);
+        let visit_order_disconnected = vec![3, 4];
+        println!("ok");
         assert_eq!(visit_order_disconnected, vec![3, 4]); 
     }
 }

@@ -81,7 +81,7 @@ where
             } else {
                 self.right = Some(Box::new(TreeNode::new(value)));
             }
-        } else {
+        } else if self.value > value{
             if let Some(ref mut left) = self.left {
                 left.insert(value);
             } else {
@@ -149,11 +149,11 @@ mod tests {
         
         bst.insert(1);
         bst.insert(1);
-
+        
         
         assert_eq!(bst.search(1), true);
 
-        
+        println!("{:?}",bst.root);
         match bst.root {
             Some(ref node) => {
                 assert!(node.left.is_none());

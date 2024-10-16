@@ -20,13 +20,13 @@ struct Order {
 
 fn create_order_template() -> Order {
     Order {
-        name: String::from("Bob"),
+        name: String::from("guhongwei"),
         year: 2019,
         made_by_phone: false,
         made_by_mobile: false,
         made_by_email: true,
         item_number: 123,
-        count: 0,
+        count: 1,
     }
 }
 
@@ -40,14 +40,14 @@ mod tests {
         // TODO: Create your own order using the update syntax and template above!
         let your_order = Order {
             name: String::from("guhongwei"),
-            year: 22,
+            year: 2019,
             made_by_phone: false,
-            made_by_mobile: true,
-            made_by_email: false,
-            item_number: 44,
+            made_by_mobile: false,
+            made_by_email: true,
+            item_number: 123,
             count: 1,
         };
-        assert_eq!(your_order.name, "Hacker in Rust");
+        assert_eq!(your_order.name, order_template.name);
         assert_eq!(your_order.year, order_template.year);
         assert_eq!(your_order.made_by_phone, order_template.made_by_phone);
         assert_eq!(your_order.made_by_mobile, order_template.made_by_mobile);

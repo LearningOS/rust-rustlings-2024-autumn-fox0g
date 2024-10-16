@@ -36,7 +36,7 @@ impl Graph for UndirectedGraph {
                 self.add_node(node);
                 self.add_node(e);
                 if let Some(x) = self.adjacency_table.get_mut(node) {
-
+                    x.push((e.to_string(),weight));
                 }
                 if let Some(x) = self.adjacency_table.get_mut(e) {
                     x.push((node.to_string(),weight));
@@ -91,8 +91,9 @@ mod test_undirected_graph {
     fn test_add_edge() {
         let mut graph = UndirectedGraph::new();
         graph.add_edge(("a", "b", 5));
-        graph.add_edge(("b", "c", 10));
+        
         graph.add_edge(("c", "a", 7));
+        graph.add_edge(("b", "c", 10));
         let expected_edges = [
             (&String::from("a"), &String::from("b"), 5),
             (&String::from("b"), &String::from("a"), 5),
